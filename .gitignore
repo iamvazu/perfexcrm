@@ -1,0 +1,33 @@
+# Environments
+.env
+.htaccess
+
+# Composer
+vendor/
+application/vendor/
+
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# CodeIgniter
+*/cache/*
+!*/cache/index.html
+!*/cache/.htaccess
+*/logs/*
+!*/logs/index.html
+*/sessions/*
+!*/sessions/index.html
+
+# Uploads (Keep the directory structure but not the files)
+uploads/*
+!uploads/index.html
+!uploads/.htaccess
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
