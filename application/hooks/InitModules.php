@@ -14,9 +14,17 @@ class InitModules
         include_once(BASEPATH . 'helpers/directory_helper.php');
 
         // Fix for Heroku: Ensure hooks are initialized
-        if (function_exists('hooks') && hooks() === null) {
-            if (file_exists(APPPATH . 'third_party/action_hooks.php')) {
-                require_once(APPPATH . 'third_party/action_hooks.php');
+        global $hooks;
+        
+        if (!class_exists('Hooks')) {
+            if (file_exists(APPPATH . 'vendor/bainternet/php-hooks/php-hooks.php')) {
+                require_once(APPPATH . 'vendor/bainternet/php-hooks/php-hooks.php');
+            }
+        }
+
+        if (!isset($hooks) || $hooks === null) {
+            if (class_exists('Hooks')) {
+                $hooks = new Hooks();
             }
         }
 
