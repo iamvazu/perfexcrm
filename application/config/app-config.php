@@ -13,7 +13,15 @@ $db_url_string = getenv('JAWSDB_URL') ?: getenv('CLEARDB_DATABASE_URL') ?: geten
 $db_url = $db_url_string ? parse_url($db_url_string) : [];
 
 // Base Site URL
-define('APP_BASE_URL', getenv('APP_BASE_URL') ?: 'http://localhost/');
+// Base Site URL
+if (getenv('APP_BASE_URL')) {
+    define('APP_BASE_URL', getenv('APP_BASE_URL'));
+} else {
+    // Dynamic detection for Heroku or other environments
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    define('APP_BASE_URL', $protocol . '://' . $host . '/');
+}
 
 // Encryption Key
 define('APP_ENC_KEY', getenv('APP_ENC_KEY') ?: 'random_key_if_not_set');
