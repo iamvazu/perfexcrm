@@ -1,10 +1,10 @@
 # Environments
 .env
-.htaccess
+
 
 # Composer
 vendor/
-application/vendor/
+
 
 
 # Node
