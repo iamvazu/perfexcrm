@@ -23,8 +23,9 @@ yarn-error.log
 
 # Uploads (Keep the directory structure but not the files)
 uploads/*
-!uploads/index.html
-!uploads/.htaccess
+!uploads/**/
+!uploads/**/*.html
+!uploads/**/*.htaccess
 
 # IDE
 .idea/
