@@ -35,7 +35,8 @@ class InitModules
                 $uris = include_once($excludeUrisPath);
 
                 if (is_array($uris)) {
-                    hooks()->add_filter('csrf_exclude_uris', function ($current) use ($uris) {
+                    global $hooks;
+                    $hooks->add_filter('csrf_exclude_uris', function ($current) use ($uris) {
                         return array_merge($current, $uris);
                     });
                 }
