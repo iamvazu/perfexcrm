@@ -17,6 +17,11 @@ if (file_exists(FCPATH . 'application/vendor/autoload.php')) {
     require_once FCPATH . 'application/vendor/autoload.php';
 }
 
+// Manually load the Action_hooks library to ensure $hooks global is available
+if (file_exists(APPPATH . 'third_party/action_hooks.php')) {
+    require_once APPPATH . 'third_party/action_hooks.php';
+}
+
 if (! function_exists('e')) {
     /**
      * Encode HTML special characters in a string.
