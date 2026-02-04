@@ -13,6 +13,13 @@ class InitModules
         // Load the directory helper so the directory_map function can be used
         include_once(BASEPATH . 'helpers/directory_helper.php');
 
+        // Fix for Heroku: Ensure hooks are initialized
+        if (function_exists('hooks') && hooks() === null) {
+            if (file_exists(APPPATH . 'third_party/action_hooks.php')) {
+                require_once(APPPATH . 'third_party/action_hooks.php');
+            }
+        }
+
         foreach (\App_modules::get_valid_modules() as $module) {
             $excludeUrisPath = $module['path'] . 'config' . DIRECTORY_SEPARATOR . 'csrf_exclude_uris.php';
 
