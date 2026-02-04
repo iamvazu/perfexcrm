@@ -31,3 +31,4 @@ uploads/*
 .vscode/
 *.swp
 .DS_Store
+composer.lock
