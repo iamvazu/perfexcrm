@@ -13,6 +13,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 |
 */
 
+if (file_exists(FCPATH . 'application/vendor/autoload.php')) {
+    require_once FCPATH . 'application/vendor/autoload.php';
+}
+
 if (! function_exists('e')) {
     /**
      * Encode HTML special characters in a string.
