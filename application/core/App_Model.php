@@ -11,7 +11,7 @@ class App_Model extends CI_Model
     {
         parent::__construct();
 
-        $this->db->reconnect();
+        // $this->db->reconnect();
 
         $timezone = get_option('default_timezone');
 
