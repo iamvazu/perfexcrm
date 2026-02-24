@@ -341,6 +341,51 @@
                     </dd>
                 </dl>
             </div>
+            <!-- Urban Ladder Design Details -->
+            <div class="col-md-12 lead-information-col mtop15">
+                <div class="lead-info-heading">
+                    <h4><i class="fa fa-home"></i> Design & Property Details</h4>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <dl>
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Property Name</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->property_name != '' ? e($lead->property_name) : '-' ?></dd>
+                            
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Property Type</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->property_type != '' ? e($lead->property_type) : '-' ?></dd>
+                            
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">BHK</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->bhk != '' ? e($lead->bhk) : '-' ?></dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4">
+                        <dl>
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Handover Month</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->handover_month != '' ? e(_d($lead->handover_month)) : '-' ?></dd>
+                            
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Budget Range</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->budget_range != '' ? e($lead->budget_range) : '-' ?></dd>
+                            
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Floor Plan Available</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->floor_plan_available == 1 ? 'Yes' : 'No' ?></dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-4">
+                        <dl>
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Lead Score</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><span class="label label-info"><?= $lead->lead_score ?? 0 ?></span></dd>
+                            
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">IDC Name</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->idc_name != '' ? e($lead->idc_name) : '-' ?></dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-12">
+                         <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Scope of Work</dt>
+                         <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->scope_of_work != '' ? e($lead->scope_of_work) : '-' ?></dd>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="clearfix"></div>
         <div
@@ -477,6 +522,74 @@ echo render_select('country', $countries, ['country_id', ['short_name']], 'lead_
                 <?php } ?>
             </div>
             <div class="col-md-12">
+                <hr class="mtop5 mbot15" />
+                <h4 class="tw-font-semibold tw-text-neutral-700 mbot15"><i class="fa fa-home"></i> Design & Property Details</h4>
+            </div>
+            <div class="col-md-4">
+                <?php $value = (isset($lead) ? $lead->idc_name : ''); ?>
+                <?= render_input('idc_name', 'IDC Name/ID', $value); ?>
+                
+                <?php $value = (isset($lead) ? $lead->property_name : ''); ?>
+                <?= render_input('property_name', 'Property Name', $value); ?>
+                
+                <?php
+                $prop_types = [
+                    ['id' => 'Apartment', 'name' => 'Apartment'],
+                    ['id' => 'Villa', 'name' => 'Villa'],
+                    ['id' => 'Individual House', 'name' => 'Individual House'],
+                ];
+                $selected = (isset($lead) ? $lead->property_type : '');
+                echo render_select('property_type', $prop_types, ['id', 'name'], 'Property Type', $selected);
+                ?>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $bhk_options = [
+                    ['id' => '1 BHK', 'name' => '1 BHK'],
+                    ['id' => '2 BHK', 'name' => '2 BHK'],
+                    ['id' => '3 BHK', 'name' => '3 BHK'],
+                    ['id' => '4 BHK', 'name' => '4 BHK'],
+                    ['id' => '4+ BHK', 'name' => '4+ BHK'],
+                    ['id' => 'Penthouse', 'name' => 'Penthouse'],
+                ];
+                $selected = (isset($lead) ? $lead->bhk : '');
+                echo render_select('bhk', $bhk_options, ['id', 'name'], 'BHK', $selected);
+                ?>
+
+                <?php
+                $budget_options = [
+                    ['id' => '5-10 Lakhs', 'name' => '5-10 Lakhs'],
+                    ['id' => '10-20 Lakhs', 'name' => '10-20 Lakhs'],
+                    ['id' => '20-30 Lakhs', 'name' => '20-30 Lakhs'],
+                    ['id' => '30-50 Lakhs', 'name' => '30-50 Lakhs'],
+                    ['id' => '50+ Lakhs', 'name' => '50+ Lakhs'],
+                ];
+                $selected = (isset($lead) ? $lead->budget_range : '');
+                echo render_select('budget_range', $budget_options, ['id', 'name'], 'Budget of CX', $selected);
+                ?>
+
+                <?= render_date_input('handover_month', 'Handover Month', (isset($lead) ? $lead->handover_month : '')); ?>
+            </div>
+            <div class="col-md-4">
+                <?php
+                $scopes = [
+                    ['id' => 'Full Home Design', 'name' => 'Full Home Design'],
+                    ['id' => 'Modular Kitchen', 'name' => 'Modular Kitchen'],
+                    ['id' => 'Wardrobes', 'name' => 'Wardrobes'],
+                    ['id' => 'Living Room', 'name' => 'Living Room'],
+                    ['id' => 'Turnkey', 'name' => 'Turnkey'],
+                ];
+                $selected = (isset($lead) ? explode(',', $lead->scope_of_work) : []);
+                echo render_select('scope_of_work[]', $scopes, ['id', 'name'], 'Scope of Work', $selected, ['multiple' => true]);
+                ?>
+                
+                <div class="checkbox checkbox-primary mtop25">
+                    <input type="checkbox" name="floor_plan_available" id="floor_plan_available" <?= (isset($lead) && $lead->floor_plan_available == 1) ? 'checked' : ''; ?>>
+                    <label for="floor_plan_available">Floor Plan Available</label>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <hr class="mtop10 mbot10" />
                 <?php $value = (isset($lead) ? $lead->description : ''); ?>
                 <?= render_textarea('description', 'lead_description', $value); ?>
                 <div class="row">
