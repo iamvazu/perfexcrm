@@ -239,3 +239,20 @@ function ul_get_agent_performance_stats() {
     ];
     return $chart;
 }
+
+// 5. Menu Customization
+hooks()->add_filter('sidebar_menu_items', 'ul_customize_sidebar_menu');
+
+function ul_customize_sidebar_menu($items) {
+    // Remove Subscriptions
+    if (isset($items['subscriptions'])) {
+        unset($items['subscriptions']);
+    }
+
+    // Move Leads to 3rd place (position 8, between Customers at 5 and Sales at 10)
+    if (isset($items['leads'])) {
+        $items['leads']['position'] = 8;
+    }
+    
+    return $items;
+}
