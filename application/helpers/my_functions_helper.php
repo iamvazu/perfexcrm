@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * Maintained via my_functions_helper.php
  */
 
-hooks()->add_action('after_render_top_search', 'ul_maybe_create_dummy_leads');
+hooks()->add_action('admin_after_navbar_start', 'ul_maybe_create_dummy_leads');
 
 function ul_maybe_create_dummy_leads() {
     if (get_instance()->input->get('create_dummy_leads') == '1') {
