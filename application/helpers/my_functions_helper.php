@@ -263,9 +263,12 @@ function ul_get_agent_performance_stats() {
 hooks()->add_filter('sidebar_menu_items', 'ul_customize_sidebar_menu');
 
 function ul_customize_sidebar_menu($items) {
-    // Remove Subscriptions
-    if (isset($items['subscriptions'])) {
-        unset($items['subscriptions']);
+    // Remove unnecessary modules
+    $remove_items = ['subscriptions', 'expenses', 'contracts'];
+    foreach ($remove_items as $item_key) {
+        if (isset($items[$item_key])) {
+            unset($items[$item_key]);
+        }
     }
 
     // Move Leads to 3rd place (position 8, between Customers at 5 and Sales at 10)
