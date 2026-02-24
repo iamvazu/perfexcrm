@@ -29,7 +29,7 @@ function ul_db_update() {
         'bhk' => ['type' => 'VARCHAR', 'constraint' => 20, 'null' => TRUE],
         'scope_of_work' => ['type' => 'TEXT', 'null' => TRUE],
         'budget_range' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => TRUE],
-        'awareness_source' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => TRUE],
+        'lead_source' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => TRUE],
         'meeting_date' => ['type' => 'DATETIME', 'null' => TRUE],
         'meeting_type' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => TRUE],
         'experience_centre' => ['type' => 'VARCHAR', 'constraint' => 100, 'null' => TRUE],
@@ -155,6 +155,9 @@ function ul_dashboard_inject_stats($data) {
 
 function ul_get_leads_by_source_stats() {
     $CI =& get_instance();
+    if (!$CI->db->field_exists('lead_source', db_prefix().'leads')) {
+        return ['labels' => [], 'datasets' => [['data' => []]]];
+    }
     $CI->db->select('lead_source as name, COUNT(*) as total');
     $CI->db->from(db_prefix() . 'leads');
     $CI->db->where('lead_source IS NOT NULL AND lead_source != ""');
@@ -174,6 +177,9 @@ function ul_get_leads_by_source_stats() {
 
 function ul_get_property_type_distribution_stats() {
     $CI =& get_instance();
+    if (!$CI->db->field_exists('property_type', db_prefix().'leads')) {
+        return ['labels' => [], 'datasets' => [['data' => []]]];
+    }
     $CI->db->select('property_type as name, COUNT(*) as total');
     $CI->db->from(db_prefix() . 'leads');
     $CI->db->where('property_type IS NOT NULL AND property_type != ""');
@@ -190,6 +196,9 @@ function ul_get_property_type_distribution_stats() {
 
 function ul_get_budget_range_analysis_stats() {
     $CI =& get_instance();
+    if (!$CI->db->field_exists('budget_range', db_prefix().'leads')) {
+        return ['labels' => [], 'datasets' => [['data' => []]]];
+    }
     $CI->db->select('budget_range as name, COUNT(*) as total');
     $CI->db->from(db_prefix() . 'leads');
     $CI->db->where('budget_range IS NOT NULL AND budget_range != ""');
