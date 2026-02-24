@@ -266,3 +266,29 @@ function ul_customize_sidebar_menu($items) {
     
     return $items;
 }
+
+// 6. Logo & Icon Customization
+hooks()->add_filter('admin_header_logo_url', 'ul_custom_admin_logo');
+hooks()->add_filter('company_logo', 'ul_custom_company_logo');
+hooks()->add_action('app_admin_head', 'ul_add_favicon');
+hooks()->add_action('app_client_head', 'ul_add_favicon');
+
+function ul_custom_admin_logo($url) {
+    return base_url('uploads/company/urban_ladder_icon.png');
+}
+
+function ul_custom_company_logo($logo) {
+    $CI =& get_instance();
+    // Use full logo for login page
+    if ($CI->router->fetch_class() == 'authentication') {
+        return '<a href="' . site_url() . '" class="logo img-responsive">
+            <img src="' . base_url('uploads/company/urban_ladder_logo.jpg') . '" class="img-responsive" alt="Urban Ladder">
+        </a>';
+    }
+    // For other places (like emails or customer area), use the icon or keep default
+    return $logo;
+}
+
+function ul_add_favicon() {
+    echo '<link rel="shortcut icon" href="' . base_url('uploads/company/urban_ladder_icon.png') . '" type="image/png">';
+}
