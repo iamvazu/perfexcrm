@@ -357,6 +357,9 @@
                             
                             <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">BHK</dt>
                             <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->bhk != '' ? e($lead->bhk) : '-' ?></dd>
+                            
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">CX Age</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->cx_age != '' ? e($lead->cx_age) : '-' ?></dd>
                         </dl>
                     </div>
                     <div class="col-md-4">
@@ -369,6 +372,9 @@
                             
                             <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Floor Plan Available</dt>
                             <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->floor_plan_available == 1 ? 'Yes' : 'No' ?></dd>
+
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Gender</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->gender != '' ? e($lead->gender) : '-' ?></dd>
                         </dl>
                     </div>
                     <div class="col-md-4">
@@ -378,6 +384,12 @@
                             
                             <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">IDC Name</dt>
                             <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->idc_name != '' ? e($lead->idc_name) : '-' ?></dd>
+
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Qualified Date</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->qualified_date != '' ? e(_d($lead->qualified_date)) : '-' ?></dd>
+
+                            <dt class="lead-field-heading tw-font-normal tw-text-neutral-500">Marketing Source</dt>
+                            <dd class="tw-text-neutral-900 tw-mt-1"><?= isset($lead) && $lead->marketing_source != '' ? e($lead->marketing_source) : '-' ?></dd>
                         </dl>
                     </div>
                     <div class="col-md-12">
@@ -541,6 +553,16 @@ echo render_select('country', $countries, ['country_id', ['short_name']], 'lead_
                 $selected = (isset($lead) ? $lead->property_type : '');
                 echo render_select('property_type', $prop_types, ['id', 'name'], 'Property Type', $selected);
                 ?>
+
+                <?php
+                $age_options = [
+                    ['id' => 'Below 30', 'name' => 'Below 30'],
+                    ['id' => '30-40', 'name' => '30-40'],
+                    ['id' => '40 & above', 'name' => '40 & above'],
+                ];
+                $selected = (isset($lead) ? $lead->cx_age : '');
+                echo render_select('cx_age', $age_options, ['id', 'name'], 'CX Age', $selected);
+                ?>
             </div>
             <div class="col-md-4">
                 <?php
@@ -568,6 +590,17 @@ echo render_select('country', $countries, ['country_id', ['short_name']], 'lead_
                 echo render_select('budget_range', $budget_options, ['id', 'name'], 'Budget of CX', $selected);
                 ?>
 
+                <?php
+                $gender_options = [
+                    ['id' => 'Male', 'name' => 'Male'],
+                    ['id' => 'Female', 'name' => 'Female'],
+                    ['id' => 'Couple', 'name' => 'Couple'],
+                    ['id' => 'Family', 'name' => 'Family'],
+                ];
+                $selected = (isset($lead) ? $lead->gender : '');
+                echo render_select('gender', $gender_options, ['id', 'name'], 'Gender', $selected);
+                ?>
+
                 <?= render_date_input('handover_month', 'Handover Month', (isset($lead) ? $lead->handover_month : '')); ?>
             </div>
             <div class="col-md-4">
@@ -582,8 +615,24 @@ echo render_select('country', $countries, ['country_id', ['short_name']], 'lead_
                 $selected = (isset($lead) ? explode(',', $lead->scope_of_work) : []);
                 echo render_select('scope_of_work[]', $scopes, ['id', 'name'], 'Scope of Work', $selected, ['multiple' => true]);
                 ?>
+
+                <?php
+                $how_know_options = [
+                    ['id' => 'Google', 'name' => 'Google'],
+                    ['id' => 'Hording', 'name' => 'Hording'],
+                    ['id' => 'Meta', 'name' => 'Meta'],
+                    ['id' => 'Competition', 'name' => 'Competition'],
+                    ['id' => 'Referal', 'name' => 'Referal'],
+                    ['id' => 'CP', 'name' => 'CP'],
+                    ['id' => 'Newspaper', 'name' => 'Newspaper'],
+                ];
+                $selected = (isset($lead) ? $lead->marketing_source : '');
+                echo render_select('marketing_source', $how_know_options, ['id', 'name'], 'How did you know about Urban Ladder?', $selected);
+                ?>
+
+                <?= render_date_input('qualified_date', 'Qualified Date', (isset($lead) ? $lead->qualified_date : '')); ?>
                 
-                <div class="checkbox checkbox-primary mtop25">
+                <div class="checkbox checkbox-primary mtop15">
                     <input type="checkbox" name="floor_plan_available" id="floor_plan_available" <?= (isset($lead) && $lead->floor_plan_available == 1) ? 'checked' : ''; ?>>
                     <label for="floor_plan_available">Floor Plan Available</label>
                 </div>

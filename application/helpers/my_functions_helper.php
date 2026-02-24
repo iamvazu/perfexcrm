@@ -38,7 +38,9 @@ function ul_db_update() {
         'booking_value' => ['type' => 'DECIMAL', 'constraint' => '15,2', 'default' => 0.00],
         'next_action_date' => ['type' => 'DATE', 'null' => TRUE],
         'psa_agent_id' => ['type' => 'INT', 'null' => TRUE],
-        'lead_score' => ['type' => 'INT', 'default' => 0]
+        'lead_score' => ['type' => 'INT', 'default' => 0],
+        'qualified_date' => ['type' => 'DATE', 'null' => TRUE],
+        'marketing_source' => ['type' => 'VARCHAR', 'constraint' => 150, 'null' => TRUE],
     ];
 
     foreach ($fields as $field_name => $field_data) {
@@ -140,16 +142,24 @@ function ul_add_dashboard_widgets($widgets) {
 }
 
 function ul_dashboard_inject_stats($data) {
-    $inject = [
-        'ul_leads_by_source' => json_encode(ul_get_leads_by_source_stats()),
-        'ul_property_type_stats' => json_encode(ul_get_property_type_distribution_stats()),
-        'ul_budget_stats' => json_encode(ul_get_budget_range_analysis_stats()),
-        'ul_agent_performance' => json_encode(ul_get_agent_performance_stats())
-    ];
-    
     $CI =& get_instance();
-    $CI->load->vars($inject);
+    $cache_key = 'ul_dashboard_stats_cache';
+    $cached_data = get_transient($cache_key);
+
+    if ($cached_data) {
+        $inject = unserialize($cached_data);
+    } else {
+        $inject = [
+            'ul_leads_by_source' => json_encode(ul_get_leads_by_source_stats()),
+            'ul_property_type_stats' => json_encode(ul_get_property_type_distribution_stats()),
+            'ul_budget_stats' => json_encode(ul_get_budget_range_analysis_stats()),
+            'ul_agent_performance' => json_encode(ul_get_agent_performance_stats())
+        ];
+        // Cache for 10 minutes (600 seconds)
+        set_transient($cache_key, serialize($inject), 600);
+    }
     
+    $CI->load->vars($inject);
     return array_merge($data, $inject);
 }
 
