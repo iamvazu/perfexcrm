@@ -6,6 +6,51 @@ defined('BASEPATH') or exit('No direct script access allowed');
  * Maintained via my_functions_helper.php
  */
 
+hooks()->add_action('after_render_top_search', 'ul_maybe_create_dummy_leads');
+
+function ul_maybe_create_dummy_leads() {
+    if (get_instance()->input->get('create_dummy_leads') == '1') {
+        $CI =& get_instance();
+        $CI->load->database();
+        
+        $names = ["Aditya Sharma", "Priya Nair", "Rahul Verma", "Sneha Gupta", "Vikram Singh", "Ananya Das", "Rohan Mehta", "Ishani Kapoor", "Karan Malhotra", "Zoya Khan"];
+        $cities = ["Bangalore", "Mumbai", "Delhi", "Pune", "Hyderabad"];
+        $marketing_sources = ["Instagram Ads", "Google Search", "Walk-in", "Referral", "Newspaper"];
+        $genders = ["Male", "Female", "Prefer not to say"];
+        $ages = ["18-25", "26-35", "36-45", "46-55", "55+"];
+        
+        // Get first available source and status
+        $source = $CI->db->get(db_prefix().'leads_sources')->row();
+        $status = $CI->db->get(db_prefix().'leads_status')->row();
+        
+        if (!$source || !$status) return;
+
+        for ($i = 0; $i < 10; $i++) {
+            $lead = [
+                'name'            => $names[$i],
+                'title'           => 'Property Inquiry',
+                'company'         => 'N/A',
+                'description'     => 'Sample lead for testing Urban Ladder customization.',
+                'country'         => 102, // India
+                'city'            => $cities[array_rand($cities)],
+                'address'         => ($i+1) . ' Main Street',
+                'email'           => strtolower(str_replace(' ', '.', $names[$i])) . '@example.com',
+                'phonenumber'     => '98765' . rand(10000, 99999),
+                'source'          => $source->id,
+                'status'          => $status->id,
+                'dateadded'       => date('Y-m-d H:i:s'),
+                'assigned'        => 1,
+                'cx_age'           => $ages[array_rand($ages)],
+                'gender'           => $genders[array_rand($genders)],
+                'marketing_source' => $marketing_sources[array_rand($marketing_sources)],
+                'qualified_date'   => date('Y-m-d', strtotime('-' . rand(0, 5) . ' days')),
+            ];
+            $CI->db->insert(db_prefix().'leads', $lead);
+        }
+        echo "<script>alert('10 Dummy Leads Created!');</script>";
+    }
+}
+
 // 1. Database Update Hook - Automatically runs once
 hooks()->add_action('admin_init', 'ul_db_update');
 
