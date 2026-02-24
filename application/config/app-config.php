@@ -27,7 +27,7 @@ if (getenv('APP_BASE_URL')) {
 }
 
 // Encryption Key
-define('APP_ENC_KEY', getenv('APP_ENC_KEY') ?: 'random_key_if_not_set');
+define('APP_ENC_KEY', getenv('APP_ENC_KEY') ?: '49841267426174268412674261742684');
 
 // Database Credentials
 define('APP_DB_HOSTNAME', isset($db_url['host']) ? $db_url['host'] : (getenv('APP_DB_HOSTNAME') ?: 'localhost'));
