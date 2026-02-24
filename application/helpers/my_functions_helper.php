@@ -143,10 +143,14 @@ function ul_add_dashboard_widgets($widgets) {
 
 function ul_dashboard_inject_stats($data) {
     $CI =& get_instance();
-    $cache_key = 'ul_dashboard_stats_cache';
-    $cached_data = get_transient($cache_key);
+    $cache_option = 'ul_dashboard_stats_cache';
+    $cache_time_option = 'ul_dashboard_stats_cache_time';
+    
+    $cached_data = get_option($cache_option);
+    $cache_time = get_option($cache_time_option);
+    $now = time();
 
-    if ($cached_data) {
+    if ($cached_data && $cache_time && ($now - $cache_time) < 600) {
         $inject = unserialize($cached_data);
     } else {
         $inject = [
@@ -156,7 +160,12 @@ function ul_dashboard_inject_stats($data) {
             'ul_agent_performance' => json_encode(ul_get_agent_performance_stats())
         ];
         // Cache for 10 minutes (600 seconds)
-        set_transient($cache_key, serialize($inject), 600);
+        if (!add_option($cache_option, serialize($inject), 0)) {
+            update_option($cache_option, serialize($inject));
+        }
+        if (!add_option($cache_time_option, $now, 0)) {
+            update_option($cache_time_option, $now);
+        }
     }
     
     $CI->load->vars($inject);
