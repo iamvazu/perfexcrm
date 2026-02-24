@@ -331,18 +331,29 @@ hooks()->add_action('app_admin_head', 'ul_add_favicon');
 hooks()->add_action('app_client_head', 'ul_add_favicon');
 
 function ul_custom_admin_logo($url) {
-    return base_url('uploads/company/urban_ladder_icon.png');
+    return base_url('uploads/company/urban_ladder_logo.jpg?v=2');
 }
 
 function ul_custom_company_logo($logo) {
+    if (!function_exists('get_instance')) return $logo;
     $CI =& get_instance();
-    // Use full logo for login page
-    if ($CI->router->fetch_class() == 'authentication') {
-        return '<a href="' . site_url() . '" class="logo img-responsive">
-            <img src="' . base_url('uploads/company/urban_ladder_logo.jpg') . '" class="img-responsive" alt="Urban Ladder">
+    $class = strtolower($CI->router->fetch_class());
+    
+    // The previous implementation showed the icon on the login page, 
+    // indicating that the filenames were likely swapped or the user wants the other image.
+    if ($class == 'authentication' || ($class == 'clients' && strtolower($CI->router->fetch_method()) == 'login')) {
+        return '<a href="' . site_url() . '" class="navbar-brand logo img-responsive">
+            <img src="' . base_url('uploads/company/urban_ladder_icon.png?v=2') . '" class="img-responsive" alt="Urban Ladder" style="max-height: 70px; margin-top: -15px;">
         </a>';
     }
-    // For other places (like emails or customer area), use the icon or keep default
+    
+    // For other places, return the square icon if no logo is set
+    if (empty($logo) || strip_tags($logo) == get_option('companyname')) {
+        return '<a href="' . site_url() . '" class="logo img-responsive">
+            <img src="' . base_url('uploads/company/urban_ladder_logo.jpg?v=2') . '" class="img-responsive" alt="Urban Ladder" style="max-height: 40px;">
+        </a>';
+    }
+
     return $logo;
 }
 
